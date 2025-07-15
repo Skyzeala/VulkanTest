@@ -1,0 +1,19 @@
+environment setup
+
+Install 
+    VS Code      https://code.visualstudio.com/
+        Extensions
+            C/C++
+            C/C++ Extension Pack
+            CMake Tools
+            Shader languages support for VS Code
+    Visual Studio (why on earth are the tools not available just in code)
+    VulkanSDK   https://vulkan.lunarg.com/
+    MSYS2       https://www.msys2.org/
+        open msys2.exe and run: pacman -S --needed base-devel mingw-w64-x86_64-toolchain
+        open mingw64.exe and run: pacman -S gcc make mingw-w64-x86_64-gcc mingw-w64-x86_64-mesa mingw-w64-x86_64-glew mingw-w64-x86_64-glfw
+                                  pacman -S mingw-w64-x86_64-vulkan-devel
+                                  pacman -S mingw-w64-x86_64-glm
+                                  pacman -S mingw-w64-x86_64-cmake
+    CMake
+        config was weird
