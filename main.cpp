@@ -98,9 +98,9 @@ private:
 
         glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
-        createInfo.enabledExtensionCount = glfwExtensionCount;
-        createInfo.ppEnabledExtensionNames = glfwExtensions;
-
+        auto extensions = getRequiredExtensions();
+        createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
+        createInfo.ppEnabledExtensionNames = extensions.data();
 
         if (enableValidationLayers) {
             createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
@@ -111,21 +111,21 @@ private:
 
         VkResult result = vkCreateInstance(&createInfo, nullptr, &instance);
 
-        if (vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS)
+        if (result != VK_SUCCESS)
         {
             throw std::runtime_error("failed to create vk instance!");
         }
 
-        uint32_t extensionCount = 0;
-        vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
-        std::vector<VkExtensionProperties> extensions(extensionCount);
-        vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensions.data());
+        //uint32_t extensionCount = 0;
+        //vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
+        //something went wrong here
+        //std::vector<VkExtensionProperties> extensions(extensionCount);
+        //vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensions.data());
 
         std::cout << "available extensions:\n";
 
-        for (const auto& extension : extensions) {
-            std::cout << '\t' << extension.extensionName << '\n';
-        }
+        for (int i = 0; i < extensions.size(); i++)
+            std::cout << '\t' << extensions[i] << '\n';
     }
 
     void mainLoop() {
@@ -139,6 +139,20 @@ private:
 
         glfwDestroyWindow(window);
         glfwTerminate();
+    }
+
+    std::vector<const char*> getRequiredExtensions() {
+        uint32_t glfwExtensionCount = 0;
+        const char** glfwExtensions;
+        glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+
+        std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
+
+        if (enableValidationLayers) {
+            extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+        }
+
+        return extensions;
     }
 };
 
