@@ -14,7 +14,7 @@ set(CMAKE_C_COMPILER "C:/msys64/mingw64/bin/gcc.exe")
 
 set(CMAKE_PREFIX_PATH "C:/msys64/mingw64")
 
-#set(CMAKE_BUILD_TYPE Debug) #you can turn this on to generate debug exe
+set(CMAKE_BUILD_TYPE Debug) #you can turn this on to generate debug exe
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static -static-libgcc -static-libstdc++ -pthread")
 add_definitions(-DGLFW_STATIC)
