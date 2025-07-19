@@ -16,4 +16,5 @@ Install
                                   pacman -S mingw-w64-x86_64-glm
                                   pacman -S mingw-w64-x86_64-cmake
     CMake
-        config was weird
+        might try using cmake within msys instead, regular install of cmake does not let me force g++
+        

@@ -2,13 +2,10 @@
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
-
-
-
-
 #include <iostream>
 #include <stdexcept>
 #include <cstdlib>
+
 
 
 class HelloTriangleVulkan {
@@ -23,8 +20,6 @@ public:
 private:
     GLFWwindow* window;
     VkInstance instance;
-
-    
 
     void initWindow() {
         glfwInit(); //first thing to do
@@ -70,6 +65,18 @@ private:
         {
             throw std::runtime_error("failed to create vk instance!");
         }
+
+        uint32_t extensionCount = 0;
+        vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
+        std::vector<VkExtensionProperties> extensions(extensionCount);
+        vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensions.data());
+
+        std::cout << "available extensions:\n";
+
+        for (const auto& extension : extensions) {
+            std::cout << '\t' << extension.extensionName << '\n';
+        }
+
     }
 
     void mainLoop() {
@@ -79,13 +86,12 @@ private:
     }
 
     void cleanup() {
+        vkDestroyInstance(instance, nullptr);
+
         glfwDestroyWindow(window);
         glfwTerminate();
     }
 };
-
-
-
 
 
 
@@ -99,7 +105,5 @@ int main() {
         return EXIT_FAILURE;
     }
 
-
     return EXIT_SUCCESS;
-
 }
