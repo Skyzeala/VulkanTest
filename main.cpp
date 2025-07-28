@@ -7,8 +7,9 @@
 #include <cstdlib>
 #include <cstring>
 #include <vector>
+#include <map>
 
-//up next: debugging instance creation and destruction
+
 
 const std::vector<const char*> validationLayers = {
     "VK_LAYER_KHRONOS_validation"
@@ -67,6 +68,7 @@ private:
     GLFWwindow* window;
     VkInstance instance;
     VkDebugUtilsMessengerEXT debugMessenger;
+    VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
 
     void initWindow() {
         glfwInit(); //first thing to do
@@ -80,11 +82,43 @@ private:
     void initVulkan() {
         createInstance();
         setupDebugMessenger();
+        pickPhysicalDevice();
+    }
+
+    void pickPhysicalDevice() {
+        uint32_t deviceCount = 0;
+        vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
+        if (deviceCount == 0) {
+            throw std::runtime_error("Failed to find GPUs with Vulkan support!");
+        }
+        std::vector<VkPhysicalDevice> devices(deviceCount);
+        vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
+
+        for (const auto& device : devices) {
+            if (isDeviceSuitable(device)) {
+                physicalDevice = device;
+                break;
+            }
+        }
+        
+        if (physicalDevice == VK_NULL_HANDLE) {
+            throw std::runtime_error("failed to find a suitable GPU!");
+        }
+    }
+
+    bool isDeviceSuitable(VkPhysicalDevice device) {
+        VkPhysicalDeviceProperties deviceProperties; //name, type, and support
+        VkPhysicalDeviceFeatures deviceFeatures; //texture compression, 64 bit floats, vr stuff
+        vkGetPhysicalDeviceProperties(device, &deviceProperties);
+        vkGetPhysicalDeviceFeatures(device, &deviceFeatures);
+
+        //return true only if device is a gpu capable of geometry shaders
+        return deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU && deviceFeatures.geometryShader;
     }
 
     void createInstance() {
         if (enableValidationLayers && !checkValidationLayerSupport()) {
-            throw std::runtime_error("validation layers requested, but not available!");
+            throw std::runtime_error("Validation layers requested, but not available!");
         }
 
         VkApplicationInfo appInfo{};
