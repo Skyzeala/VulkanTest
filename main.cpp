@@ -86,6 +86,10 @@ private:
     }
 
     void pickPhysicalDevice() {
+        //give device candidates a score and store them in score order
+        std::multimap<int, VkPhysicalDevice> candidates;
+
+
         uint32_t deviceCount = 0;
         vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
         if (deviceCount == 0) {
@@ -95,15 +99,39 @@ private:
         vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
 
         for (const auto& device : devices) {
-            if (isDeviceSuitable(device)) {
-                physicalDevice = device;
-                break;
-            }
+            int score = rateDeviceSuitability(device);
+            candidates.insert(std::make_pair(score, device));
         }
         
-        if (physicalDevice == VK_NULL_HANDLE) {
+        if (candidates.rbegin()->first > 0) {
+            physicalDevice = candidates.rbegin()->second;
+        } else {
             throw std::runtime_error("failed to find a suitable GPU!");
         }
+    }
+
+    int rateDeviceSuitability(VkPhysicalDevice device) {
+        int score = 0;
+
+        VkPhysicalDeviceProperties deviceProperties; //name, type, and support
+        VkPhysicalDeviceFeatures deviceFeatures; //texture compression, 64 bit floats, vr stuff
+        vkGetPhysicalDeviceProperties(device, &deviceProperties);
+        vkGetPhysicalDeviceFeatures(device, &deviceFeatures);
+        
+        //discrete gpus have significant performance advantages
+        if (deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
+            score += 1000;
+        }
+
+        //maximum texture size will affect potential quality
+        score += deviceProperties.limits.maxImageDimension2D;
+
+        //application requires geometry shader
+        if (!deviceFeatures.geometryShader) {
+            return 0;
+        }
+
+        return score;
     }
 
     bool isDeviceSuitable(VkPhysicalDevice device) {
