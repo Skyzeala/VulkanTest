@@ -10,7 +10,7 @@
 #include <map> 
 #include <optional> //C++17
 
-//currently on page 65
+
 
 const std::vector<const char*> validationLayers = {
     "VK_LAYER_KHRONOS_validation"
@@ -71,6 +71,7 @@ private:
     VkDebugUtilsMessengerEXT debugMessenger;
     VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
     VkDevice logicalDevice;
+    VkQueue graphicsQueue;
 
     struct QueueFamilyIndices {
         std::optional<uint32_t> graphicsFamily;

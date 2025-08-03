@@ -4,18 +4,28 @@
 #rm -rf CMakeCache.txt CMakeFiles
 #cmake .. -G "MinGW Makefiles" -DCMAKE_C_COMPILER=C:/msys64/mingw64/bin/gcc.exe -DCMAKE_CXX_COMPILER=C:/msys64/mingw64/bin/g++.exe
 #mingw32-make
+
+#you can turn this on to generate debug exe
+option(ENABLE_DEBUG "Compile in debug mode." ON)
+
+
+
 cmake_minimum_required(VERSION 3.10.0)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+#suggest compilers to CMake, it doesn't seem to really listen though so we run cmake through msys
 set(CMAKE_CXX_COMPILER C:/msys64/mingw64/bin/g++.exe)
 set(CMAKE_C_COMPILER "C:/msys64/mingw64/bin/gcc.exe")
 
 set(CMAKE_PREFIX_PATH "C:/msys64/mingw64")
 
-set(CMAKE_BUILD_TYPE Debug) #you can turn this on to generate debug exe
+if(ENABLE_DEBUG)
+  set(CMAKE_BUILD_TYPE Debug) 
+endif()
 
+#set everything to static to use static libraries, this creates a portable executable
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static -static-libgcc -static-libstdc++ -pthread")
 add_definitions(-DGLFW_STATIC)
 
@@ -39,6 +49,8 @@ find_package(glfw3 REQUIRED)
 target_include_directories(VulkanTest PRIVATE C:/msys64/mingw64/include) #also includes GLM
 target_link_libraries(VulkanTest PRIVATE C:/msys64/mingw64/lib/libglfw3.a)
 
+
+#some other CMake notes for later
 
 #include(FetchContent)
 
