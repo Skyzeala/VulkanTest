@@ -10,7 +10,7 @@ Build steps:
 
 Big thanks to https://vulkan-tutorial.com/
 
-Current page: 67
+
 
 Topics explored:
 - Vulkan overview - what it takes to draw the first triangle
@@ -23,5 +23,4 @@ Topics explored:
 - Physical devices - find GPUs and check their computing and Vulkan support capabilities, then pick one to use
 - Queue families - check device support for different command subsets
 - Logical devices - set up the interface for interacting with the chosen physical device
-
-
+- WSI - Windows System Integration extensions - present rendered images
