@@ -12,7 +12,7 @@ Big thanks to https://vulkan-tutorial.com/
 
 
 
-Topics explored:
+Topics explored so far:
 - Vulkan overview - what it takes to draw the first triangle
 - Environment setup - making sure Vulkan, glfw, and glm are properly included
 - Basic program setup - initialize, main loop, cleanup
