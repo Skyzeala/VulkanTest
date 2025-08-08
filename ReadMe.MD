@@ -23,4 +23,5 @@ Topics explored so far:
 - Physical devices - find GPUs and check their computing and Vulkan support capabilities, then pick one to use
 - Queue families - check device support for different command subsets
 - Logical devices - set up the interface for interacting with the chosen physical device
-- WSI - Windows System Integration extensions - present rendered images
+- WSI & Surfaces - Windows System Integration extensions - present rendered images
+- Swap chain - initial setup of swap chain surfaces 
