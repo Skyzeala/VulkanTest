@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <cstdlib>
 #include <cstring>
+
 #include <vector> 
 #include <map> 
 #include <set>
@@ -46,6 +47,15 @@ void DestroyDebugUtilsMessengerEXT(VkInstance instance,
     }
 }
 
+struct QueueFamilyIndices {
+    std::optional<uint32_t> graphicsFamily;
+    std::optional<uint32_t> presentFamily;
+
+    bool isComplete() {
+        return graphicsFamily.has_value() && presentFamily.has_value();
+    }
+};
+
 class HelloTriangleVulkan {
 public:
     void run() { 
@@ -55,34 +65,19 @@ public:
         cleanup(); 
     }
 
-    static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
-           VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
-           VkDebugUtilsMessageTypeFlagsEXT messageType,
-           const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
-           void* pUserData) {
-        std::cerr << "validation layer: " << pCallbackData->pMessage << std::endl;
-
-        return VK_FALSE;
-    }
-
 private:
     GLFWwindow* window;
     VkInstance instance;
+    VkSurfaceKHR surface; //this might need to be outside of the class?
+
     VkDebugUtilsMessengerEXT debugMessenger;
+
     VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
     VkDevice logicalDevice;
+
+    
     VkQueue graphicsQueue;
-    VkSurfaceKHR surface; //this might need to be outside of the class?
     VkQueue presentQueue;
-
-    struct QueueFamilyIndices {
-        std::optional<uint32_t> graphicsFamily;
-        std::optional<uint32_t> presentFamily;
-
-        bool isComplete() {
-            return graphicsFamily.has_value() && presentFamily.has_value();
-        }
-    };
 
     void initWindow() {
         glfwInit(); //first thing to do
@@ -90,7 +85,7 @@ private:
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API); //tells glfw not to initialize opengl context
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); //turn off window resizing, special care? did glew have that?
         
-        window = glfwCreateWindow(1000, 800, "Vulkan", nullptr, nullptr);
+        window = glfwCreateWindow(1000, 800, "VulkanTest", nullptr, nullptr);
     }
 
     void initVulkan() {
@@ -325,6 +320,16 @@ private:
         if (CreateDebugUtilsMessengerEXT(instance, &createInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
             throw std::runtime_error("failed to set up debug messenger!");
         }
+    }
+
+    static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
+           VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+           VkDebugUtilsMessageTypeFlagsEXT messageType,
+           const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
+           void* pUserData) {
+        std::cerr << "validation layer: " << pCallbackData->pMessage << std::endl;
+
+        return VK_FALSE;
     }
 
     bool checkValidationLayerSupport() {
