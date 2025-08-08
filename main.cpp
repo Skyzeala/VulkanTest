@@ -318,6 +318,26 @@ private:
         return availableFormats[0];
     }
 
+    VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes) {
+        std::vector<VkPresentModeKHR>& availablePresentModes) {
+        for (const auto& availablePresentMode : availablePresentModes) {
+            if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR) {
+                return availablePresentMode;
+            }
+        }
+        
+        return VK_PRESENT_MODE_FIFO_KHR;
+        //other modes are not guranteed to be available
+        //VK_PRESENT_MODE_IMMEDIATE_KHR: Images submitted by your application are transferred to the screen right away, may result in tearing
+        //VK_PRESENT_MODE_FIFO_KHR: Most similar to vertical sync as found in modern games. 
+        //VK_PRESENT_MODE_FIFO_RELAXED_KHR: Will wait for the queue to have an item and then immediately display
+        //VK_PRESENT_MODE_MAILBOX_KHR: Replace existing swap chain queue items when queue is full
+    }
+
+    VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) {
+        //resolution of images, in progress page 79 
+    }
+
     void createInstance() {
         if (enableValidationLayers && !checkValidationLayerSupport()) {
             throw std::runtime_error("Validation layers requested, but not available!");
