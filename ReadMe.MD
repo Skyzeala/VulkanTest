@@ -1,6 +1,6 @@
-Learning how to use vulkan one step at a time
+Learning how to use vulkan one step at a time.
 
-The goal with the build process was to easily build on other systems as well as have a portable binary
+The goal with the build process was to easily build on other systems as well as have a portable binary.
 
 Build steps:
 - open mingw64.exe and navigate to the build folder, then run these commands
@@ -14,7 +14,7 @@ Big thanks to https://vulkan-tutorial.com/
 
 Topics explored so far:
 - Vulkan overview - what it takes to draw the first triangle
-- Environment setup - making sure Vulkan, glfw, and glm are properly included
+- Environment setup - making sure Vulkan, GLFW, and GLM are properly included
 - Basic program setup - initialize, main loop, cleanup
 - Window setup - use GLFW to create a space to draw in
 - Vulkan instance - create a basic instance of Vulkan with extensions from GLFW
