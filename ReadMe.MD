@@ -1,5 +1,7 @@
 Learning how to use vulkan one step at a time.
 
+"Even the smallest step's a leap toward your dream" Linus from the Stars - It's Alright, It's Okay
+
 The goal with the build process was to easily build on other systems as well as have a portable binary.
 
 Build steps:
@@ -24,4 +26,4 @@ Topics explored so far:
 - Queue families - check device support for different command subsets
 - Logical devices - set up the interface for interacting with the chosen physical device
 - WSI & Surfaces - Windows System Integration extensions - present rendered images
-- Swap chain - initial setup of swap chain surfaces 
+- Swap chain - initial setup of swap chain surfaces, access to swap chain elements, and prepping for drawing
