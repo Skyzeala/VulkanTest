@@ -26,4 +26,5 @@ Topics explored so far:
 - Queue families - check device support for different command subsets
 - Logical devices - set up the interface for interacting with the chosen physical device
 - WSI & Surfaces - Windows System Integration extensions - present rendered images
-- Swap chain - initial setup of swap chain surfaces, access to swap chain elements, and prepping for drawing
+- Swap chain - setup of swap chain surfaces, access to swap chain elements, and prepping for drawing
+- Graphics pipeline - review of graphics pipeline elements and shaders and how it works in Vulkan
