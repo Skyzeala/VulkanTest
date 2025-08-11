@@ -82,7 +82,6 @@ private:
     GLFWwindow* window;
     VkInstance instance;
     VkSurfaceKHR surface;
-    VkSwapchainKHR swapChain;
 
     VkDebugUtilsMessengerEXT debugMessenger;
 
@@ -91,6 +90,11 @@ private:
 
     VkQueue graphicsQueue;
     VkQueue presentQueue;
+
+    VkSwapchainKHR swapChain;
+    std::vector<VkImage> swapChainImages;
+    VkFormat swapChainImageFormat;
+    VkExtent2D swapChainExtent;
 
     void initWindow() {
         glfwInit(); //first thing to do
@@ -331,6 +335,12 @@ private:
         if (vkCreateSwapchainKHR(logicalDevice, &createInfo, nullptr, &swapChain) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create swap chain!");
         }
+        //retrieve the images we just created
+        vkGetSwapchainImagesKHR(logicalDevice, swapChain, &imageCount, nullptr);
+        swapChainImages.resize(imageCount);
+        vkGetSwapchainImagesKHR(logicalDevice, swapChain, &imageCount, swapChainImages.data());
+        swapChainImageFormat = surfaceFormat.format;
+        swapChainExtent = extent;
     }
 
     SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device) {
