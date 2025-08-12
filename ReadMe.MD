@@ -1,10 +1,10 @@
-Learning how to use vulkan one step at a time.
+Learning how to use Vulkan one step at a time.
 
 "Even the smallest step's a leap toward your dream" Linus from the Stars - It's Alright, It's Okay
 
 The goal with the build process was to easily build on other systems as well as have a portable binary.
 
-Build steps:
+Build steps after environment is set up:
 - open mingw64.exe and navigate to the build folder, then run these commands
 - rm -rf CMakeCache.txt CMakeFiles VulkanTest.exe
 - cmake .. -G "MinGW Makefiles" -DCMAKE_C_COMPILER=C:/msys64/mingw64/bin/gcc.exe     -DCMAKE_CXX_COMPILER=C:/msys64/mingw64/bin/g++.exe
@@ -28,3 +28,4 @@ Topics explored so far:
 - WSI & Surfaces - Windows System Integration extensions - present rendered images
 - Swap chain - setup of swap chain surfaces, access to swap chain elements, and prepping for drawing
 - Graphics pipeline - review of graphics pipeline elements and shaders and how it works in Vulkan
+- GLSL - review of GLSL basics for vertex and fragment shaders and conversion to SPIR-V
