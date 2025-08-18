@@ -29,3 +29,7 @@ Topics explored so far:
 - Swap chain - setup of swap chain surfaces, access to swap chain elements, and prepping for drawing
 - Graphics pipeline - review of graphics pipeline elements and shaders and how it works in Vulkan
 - GLSL - review of GLSL basics for vertex and fragment shaders and conversion to SPIR-V
+- Viewports and scissors - region of the frame buffer to render output to
+- Rasterizer - convert geometry into fragments
+- Color blending - alpha blending of fragment shader return value and existing color in the frame buffer
+- Render Passes
