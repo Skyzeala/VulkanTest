@@ -32,4 +32,5 @@ Topics explored so far:
 - Viewports and scissors - region of the frame buffer to render output to
 - Rasterizer - convert geometry into fragments
 - Color blending - alpha blending of fragment shader return value and existing color in the frame buffer
-- Render Passes
+- Render Passes - single subpass render pass in preparation for drawing a single triangle
+
