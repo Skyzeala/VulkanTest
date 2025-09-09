@@ -33,4 +33,4 @@ Topics explored so far:
 - Rasterizer - convert geometry into fragments
 - Color blending - alpha blending of fragment shader return value and existing color in the frame buffer
 - Render Passes - single subpass render pass in preparation for drawing a single triangle
-
+- Drawing and framebuffers - setting up canvases, drawing, and feeding them into the swap chain
