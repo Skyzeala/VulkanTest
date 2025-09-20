@@ -34,3 +34,6 @@ Topics explored so far:
 - Color blending - alpha blending of fragment shader return value and existing color in the frame buffer
 - Render Passes - single subpass render pass in preparation for drawing a single triangle
 - Drawing and framebuffers - setting up swap chain swap chain framebuffers for drawing
+- Command buffers - begin render pass and fill drawing space with black, bind the pipeline we want to render with, and dynamically define viewport and scissor state
+
+
