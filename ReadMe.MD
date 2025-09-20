@@ -35,5 +35,6 @@ Topics explored so far:
 - Render Passes - single subpass render pass in preparation for drawing a single triangle
 - Drawing and framebuffers - setting up swap chain swap chain framebuffers for drawing
 - Command buffers - begin render pass and fill drawing space with black, bind the pipeline we want to render with, and dynamically define viewport and scissor state
-
+- Semaphores & fences - Synchronize execution on GPU and CPU
+- Subpass dependencies - 
 
