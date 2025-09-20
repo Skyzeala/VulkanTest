@@ -12,6 +12,8 @@ Build steps after environment is set up:
 
 Big thanks to https://vulkan-tutorial.com/
 
+Check out this Vulkan triangle!
+![Image of a multi-colored triangle rendered by VulkanTest](FirstTriangle.png)
 
 
 Topics explored so far:
