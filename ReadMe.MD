@@ -39,3 +39,5 @@ Topics explored so far:
 - Command buffers - begin render pass and fill drawing space with black, bind the pipeline we want to render with, and dynamically define viewport and scissor state
 - Semaphores & fences - Synchronize execution on GPU and CPU
 - Multiple frames in flight
+- Window resizing and minimizing
+- Creating custom shapes in C++ and converting them through Vulkan onto the GPU
