@@ -183,10 +183,11 @@ private:
         glfwInit(); //first thing to do
 
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API); //tells glfw not to initialize opengl context
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); //turn off window resizing, special care? did glew have that?
+        //glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); //turn off window resizing, special care? did glew have that?
         
         //screen coordinates of window size, not pixels
         window = glfwCreateWindow(WIDTH, HEIGHT, "VulkanTest", nullptr, nullptr);
+        glfwSetWindowUserPointer(window, this);
         glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
     }
 
