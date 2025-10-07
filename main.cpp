@@ -170,10 +170,17 @@ private:
     bool framebufferResized = false;
 
     //interleaved position and color for vertices
+    //y is inverted, positive values go downward and negative goes upward
+    //the normal of the vector must point out from the screen, same as opengl
+    //vertices should be listed in clockwise order
     std::vector<Vertex> vertices = {
-        {{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-        {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
-        {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
+        {{-0.8f, -0.2f}, {0.0f, 0.0f, 0.2f}},
+        {{-0.5f, -0.8f}, {0.0f, 0.2f, 0.0f}},
+        {{-0.2f, -0.2f}, {0.2f, 0.0f, 0.0f}},
+        //two triangles!
+        {{0.8f, 0.2f}, {0.0f, 1.0f, 0.2f}},
+        {{0.5f, 0.8f}, {1.0f, 0.2f, 0.0f}},
+        {{0.2f, 0.2f}, {0.2f, 0.0f, 1.0f}}
     };
 
     VkBuffer vertexBuffer;
@@ -187,6 +194,7 @@ private:
         
         //screen coordinates of window size, not pixels
         window = glfwCreateWindow(WIDTH, HEIGHT, "VulkanTest", nullptr, nullptr);
+
         glfwSetWindowUserPointer(window, this);
         glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
     }
