@@ -257,6 +257,61 @@ private:
         glfwTerminate();
     }
 
+    void createVertices() {
+        glm::vec2 pos;
+        glm::vec3 color;
+        int depth = 7;
+        
+        vertices.clear();
+        vertices = {{{0.0f, -0.5f}, {0.0f, 1.0f, 0.0f}}, //top
+                    {{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}, //left
+                    {{-0.5f, 0.5f}, {1.0f, 0.0f, 0.0f}} //right
+        }; //this triangle is kept with the rainbow colors, then white triangles are drawn on top
+
+        //create sierpinsky triangle
+        createSierpinsky(depth, vertices, vertices);
+    }
+
+    //recursive generation of a basic sierpinski triangle
+    void createSierpinsky(int depth, std::vector<Vertex> &triangleList, const std::vector<Vertex> &triangle) {
+        if (depth <= 0) {
+            triangleList.push_back(triangle[0]);
+            triangleList.push_back(triangle[1]);
+            triangleList.push_back(triangle[2]);
+            return;
+        }
+            
+        glm::vec3 color(1.0f,1.0f,1.0f);
+
+        //vectors to store the three new triangles to make
+        std::vector<Vertex> topTri;
+        std::vector<Vertex> leftTri;
+        std::vector<Vertex> rightTri;
+
+        //find the midpoints for each vertex
+        glm::vec2 midRight((triangle[0].pos[0] + triangle[1].pos[0])/2.0, (triangle[0].pos[1] + triangle[1].pos[1])/2.0);
+        glm::vec2 midLeft((triangle[0].pos[0] + triangle[2].pos[0])/2.0, (triangle[0].pos[1] + triangle[2].pos[1])/2.0);
+        glm::vec2 midBot((triangle[1].pos[0] + triangle[2].pos[0])/2.0, (triangle[1].pos[1] + triangle[2].pos[1])/2.0);
+
+        //add the triangle points to the vectors
+        topTri.push_back(Vertex(triangle[0].pos, color));
+        topTri.push_back(Vertex(midRight, color));
+        topTri.push_back(Vertex(midLeft, color));
+
+        leftTri.push_back(Vertex(midLeft, color));
+        leftTri.push_back(Vertex(midBot, color));
+        leftTri.push_back(Vertex(triangle[2].pos, color));
+
+        rightTri.push_back(Vertex(midRight, color));
+        rightTri.push_back(Vertex(triangle[1].pos, color));
+        rightTri.push_back(Vertex(midBot, color));
+
+        //subdivide further
+        createSierpinsky(depth-1, triangleList, topTri);
+        createSierpinsky(depth-1, triangleList, leftTri);
+        createSierpinsky(depth-1, triangleList, rightTri);
+    }
+
     void drawFrame() {
         //aquire image from swap chain
         //execute drawing commands on the image
@@ -335,6 +390,7 @@ private:
     }
 
     void createVertexBuffer() {
+        createVertices();
         VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
 
         VkBuffer stagingBuffer;
