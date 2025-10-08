@@ -41,3 +41,4 @@ Topics explored so far:
 - Multiple frames in flight
 - Window resizing and minimizing
 - Creating custom shapes in C++ and converting them through Vulkan onto the GPU
+- Using staging buffers
