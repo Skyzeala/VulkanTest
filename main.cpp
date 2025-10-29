@@ -170,7 +170,7 @@ private:
     bool framebufferResized = false;
 
     //interleaved position and color for vertices
-    //y is inverted, positive values go downward and negative goes upward
+    //y is inverted from opengl, positive values go downward and negative goes upward
     //(0,0) is the screen center, 1 and -1 are screen edges
     //vertices should be listed in clockwise order for the normal to be right and the triangle to show
     std::vector<Vertex> vertices = {
