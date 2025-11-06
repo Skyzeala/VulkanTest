@@ -19,10 +19,7 @@ Check out this Sierpinski triangle!
 
 
 Topics explored so far:
-- Vulkan overview - what it takes to draw the first triangle
-- Environment setup - making sure Vulkan, GLFW, and GLM are properly included
-- Basic program setup - initialize, main loop, cleanup
-- Window setup - use GLFW to create a space to draw in
+- Basic program setup - initialize, main loop, cleanup, window setup with GLFW, intro to Vulkan
 - Vulkan instance - create a basic instance of Vulkan with extensions from GLFW
 - GLFW extensions - more extension options and info about extension support
 - Validation layers - how to get debug output when things go wrong using layers built in to the Vulkan SDK
@@ -31,8 +28,8 @@ Topics explored so far:
 - Logical devices - set up the interface for interacting with the chosen physical device
 - WSI & Surfaces - Windows System Integration extensions - present rendered images
 - Swap chain - setup of swap chain surfaces, access to swap chain elements, and prepping for drawing
-- Graphics pipeline - review of graphics pipeline elements and shaders and how it works in Vulkan
-- GLSL - review of GLSL basics for vertex and fragment shaders and conversion to SPIR-V
+- Graphics pipeline - graphics pipeline elements and shaders and how it works in Vulkan
+- GLSL - GLSL basics for vertex and fragment shaders and how to use them with Vulkan
 - Viewports and scissors - region of the frame buffer to render output to
 - Rasterizer - convert geometry into fragments
 - Color blending - alpha blending of fragment shader return value and existing color in the frame buffer
@@ -43,3 +40,4 @@ Topics explored so far:
 - Multiple frames in flight
 - Window resizing and minimizing
 - Using staging buffers
+- Vertex and index buffers - save space by removing redundant vertices

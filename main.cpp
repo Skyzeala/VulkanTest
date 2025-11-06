@@ -1,4 +1,4 @@
-#define GLFW_STATIC
+//#define GLFW_STATIC
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -171,6 +171,8 @@ private:
 
     VkBuffer vertexBuffer;
     VkDeviceMemory vertexBufferMemory;
+    VkBuffer indexBuffer;
+    VkDeviceMemory indexBufferMemory;
 
     //interleaved position and color for vertices
     //y is inverted from opengl, positive values go downward and negative goes upward
@@ -185,6 +187,10 @@ private:
         {{0.8f, 0.2f}, {0.0f, 1.0f, 0.2f}},
         {{0.5f, 0.8f}, {1.0f, 0.2f, 0.0f}},
         {{0.2f, 0.2f}, {0.2f, 0.0f, 1.0f}}
+    };
+
+    std::vector<uint16_t> indices = {
+        0, 1, 2, 3, 4, 5
     };
 
 
@@ -214,6 +220,7 @@ private:
         createFramebuffers();
         createCommandPool();
         createVertexBuffer();
+        createIndexBuffer();
         createCommandBuffers();
         createSyncObjects();
     }
@@ -229,6 +236,9 @@ private:
 
     void cleanup() {
         cleanupSwapChain();
+
+        vkDestroyBuffer(logicalDevice, indexBuffer, nullptr);
+        vkFreeMemory(logicalDevice, indexBufferMemory, nullptr);
 
         vkDestroyBuffer(logicalDevice, vertexBuffer, nullptr);
         vkFreeMemory(logicalDevice, vertexBufferMemory, nullptr);
@@ -261,16 +271,30 @@ private:
     void createVertices() {
         glm::vec2 pos;
         glm::vec3 color;
-        int depth = 8;
         
+        //4 corners of a square
+        vertices.clear();
+        vertices = {
+            {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+            {{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
+            {{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
+            {{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
+        };
+
+        indices.clear();
+        indices = {0, 1, 2, 2, 3, 0};
+
+        //create sierpinsky triangle, does not use vertex index storage optimization
+        /*
+        int depth = 8;
         vertices.clear();
         vertices = {{{0.0f, -0.7f}, {0.0f, 1.0f, 0.0f}}, //top
                     {{0.7f, 0.7f}, {0.0f, 0.0f, 1.0f}}, //left
                     {{-0.7f, 0.7f}, {1.0f, 0.0f, 0.0f}} //right
         }; //this triangle is kept with the rainbow colors, then white triangles are drawn on top
 
-        //create sierpinsky triangle
         createSierpinsky(depth, vertices, vertices);
+        */
     }
 
     //recursive generation of a basic sierpinski triangle
@@ -484,6 +508,30 @@ private:
         vkQueueWaitIdle(graphicsQueue);
 
         vkFreeCommandBuffers(logicalDevice, commandPool, 1, &commandBuffer);
+    }
+
+    void createIndexBuffer() {
+        VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
+
+        VkBuffer stagingBuffer;
+        VkDeviceMemory stagingBufferMemory;
+        createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+                     VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                     stagingBuffer, stagingBufferMemory);
+
+        void* data;
+        vkMapMemory(logicalDevice, stagingBufferMemory, 0, bufferSize, 0, &data);
+        memcpy(data, indices.data(), (size_t) bufferSize);
+        vkUnmapMemory(logicalDevice, stagingBufferMemory);
+
+        createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+                     VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, 
+                     indexBuffer, indexBufferMemory);
+
+        copyBuffer(stagingBuffer, indexBuffer, bufferSize);
+
+        vkDestroyBuffer(logicalDevice, stagingBuffer, nullptr);
+        vkFreeMemory(logicalDevice, stagingBufferMemory, nullptr);
     }
 
     uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) {
@@ -1038,8 +1086,9 @@ private:
             VkBuffer vertexBuffers[] = {vertexBuffer};
             VkDeviceSize offsets[] = {0};
             vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
+            vkCmdBindIndexBuffer(commandBuffer, indexBuffer, 0, VK_INDEX_TYPE_UINT16);
 
-            vkCmdDraw(commandBuffer, static_cast<uint32_t>(vertices.size()), 1, 0, 0);
+            vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
 
         vkCmdEndRenderPass(commandBuffer);
 
