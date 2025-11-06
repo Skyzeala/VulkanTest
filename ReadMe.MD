@@ -10,7 +10,9 @@ Build steps after environment is set up:
 - cmake .. -G "MinGW Makefiles" -DCMAKE_C_COMPILER=C:/msys64/mingw64/bin/gcc.exe     -DCMAKE_CXX_COMPILER=C:/msys64/mingw64/bin/g++.exe
 - mingw32-make
 
-Big thanks to https://vulkan-tutorial.com/
+Big thanks to: 
+https://vulkan-tutorial.com/
+Brendan Galea https://www.youtube.com/watch?v=lr93-_cC8v4
 
 Check out this Sierpinski triangle!
 ![Image of a Sierpinski triangle rendered by VulkanTest](SierpinskiTriangle.png)

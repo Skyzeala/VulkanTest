@@ -169,6 +169,9 @@ private:
     uint32_t currentFrame = 0;
     bool framebufferResized = false;
 
+    VkBuffer vertexBuffer;
+    VkDeviceMemory vertexBufferMemory;
+
     //interleaved position and color for vertices
     //y is inverted from opengl, positive values go downward and negative goes upward
     //(0,0) is the screen center, 1 and -1 are screen edges
@@ -184,8 +187,6 @@ private:
         {{0.2f, 0.2f}, {0.2f, 0.0f, 1.0f}}
     };
 
-    VkBuffer vertexBuffer;
-    VkDeviceMemory vertexBufferMemory;
 
     void initWindow() {
         glfwInit(); //first thing to do
@@ -260,12 +261,12 @@ private:
     void createVertices() {
         glm::vec2 pos;
         glm::vec3 color;
-        int depth = 7;
+        int depth = 8;
         
         vertices.clear();
-        vertices = {{{0.0f, -0.5f}, {0.0f, 1.0f, 0.0f}}, //top
-                    {{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}, //left
-                    {{-0.5f, 0.5f}, {1.0f, 0.0f, 0.0f}} //right
+        vertices = {{{0.0f, -0.7f}, {0.0f, 1.0f, 0.0f}}, //top
+                    {{0.7f, 0.7f}, {0.0f, 0.0f, 1.0f}}, //left
+                    {{-0.7f, 0.7f}, {1.0f, 0.0f, 0.0f}} //right
         }; //this triangle is kept with the rainbow colors, then white triangles are drawn on top
 
         //create sierpinsky triangle
@@ -426,7 +427,7 @@ private:
         bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
         if (vkCreateBuffer(logicalDevice, &bufferInfo, nullptr, &buffer) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create buffer!");
+            throw std::runtime_error("Failed to create vertex buffer!");
         }
 
         VkMemoryRequirements memRequirements;
