@@ -14,8 +14,8 @@ Big thanks to:
 https://vulkan-tutorial.com/
 Brendan Galea https://www.youtube.com/watch?v=lr93-_cC8v4
 
-Check out this Sierpinski triangle!
-![Image of a Sierpinski triangle rendered by VulkanTest](SierpinskiTriangle.png)
+Check out this square! We're on to 3D!
+![Image of a square in 3D rendered by VulkanTest](Images/SpinningSquare.png)
 
 
 Topics explored so far:
@@ -26,18 +26,16 @@ Topics explored so far:
 - Physical devices - find GPUs and check their computing and Vulkan support capabilities, then pick one to use
 - Queue families - check device support for different command subsets
 - Logical devices - set up the interface for interacting with the chosen physical device
-- WSI & Surfaces - Windows System Integration extensions - present rendered images
+- WSI & surfaces - Windows System Integration extensions - present rendered images
 - Swap chain - setup of swap chain surfaces, access to swap chain elements, and prepping for drawing
 - Graphics pipeline - graphics pipeline elements and shaders and how it works in Vulkan
 - GLSL - GLSL basics for vertex and fragment shaders and how to use them with Vulkan
 - Viewports and scissors - region of the frame buffer to render output to
 - Rasterizer - convert geometry into fragments
 - Color blending - alpha blending of fragment shader return value and existing color in the frame buffer
-- Render Passes - single subpass render pass in preparation for drawing a single triangle
-- Drawing and framebuffers - setting up swap chain swap chain framebuffers for drawing
+- Render passes - single subpass render pass in preparation for drawing a single triangle
+- Swap chain, drawing, and framebuffers - setting up swap chain swap chain framebuffers for drawing
 - Command buffers - begin render pass and fill drawing space with black, bind the pipeline we want to render with, and dynamically define viewport and scissor state
 - Semaphores & fences - synchronize execution on GPU and CPU
-- Multiple frames in flight
-- Window resizing and minimizing
-- Using staging buffers
+- Multiple frames in flight and using staging buffers
 - Vertex and index buffers - save space by removing redundant vertices

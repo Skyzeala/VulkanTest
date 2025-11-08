@@ -20,11 +20,11 @@ Install
 
 
 Build steps:
-    open mingw64.exe and navigate to the build folder, then run these commands
+    Open mingw64.exe and navigate to the build folder, then run these commands
     rm -rf CMakeCache.txt CMakeFiles VulkanTest.exe
     cmake .. -G "MinGW Makefiles" -DCMAKE_C_COMPILER=C:/msys64/mingw64/bin/gcc.exe -DCMAKE_CXX_COMPILER=C:/msys64/mingw64/bin/g++.exe
     mingw32-make
 
-    you can compile the shaders with the bat file in the shaders folder or with these commands (change path as needed)
-    C:/VulkanSDK/1.4.313.0/Bin/glslc.exe ../shaders/fragment_shader.frag -o frag.spv
-    C:/VulkanSDK/1.4.313.0/Bin/glslc.exe ../shaders/vertex_shader.vert -o vert.spv
+    You can compile the shaders to SPIR-V with the bat file in the shaders folder or with these commands in mingw (change path as needed)
+    C:/VulkanSDK/1.4.313.0/Bin/glslc.exe fragment_shader.frag -o frag.spv
+    C:/VulkanSDK/1.4.313.0/Bin/glslc.exe vertex_shader.vert -o vert.spv
