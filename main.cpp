@@ -1,7 +1,9 @@
 //#define GLFW_STATIC
 #define GLFW_INCLUDE_VULKAN
-#define GLM_FORCE_RADIANS
 #include <GLFW/glfw3.h>
+
+#define GLM_FORCE_RADIANS
+#define GLM_FORCE_DEFAULT_ALIGNED_GENTYPES //default to correct alignment
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -110,23 +112,7 @@ void DestroyDebugUtilsMessengerEXT(VkInstance instance,
     }
 }
 
-std::vector<char> readFile(const std::string& filename) {
-    std::ifstream file(filename, std::ios::ate | std::ios::binary);
 
-    if (!file.is_open()) {
-        throw std::runtime_error("Failed to open file!");
-    }
-
-    size_t fileSize = (size_t) file.tellg();
-    std::vector<char> buffer(fileSize);
-
-    file.seekg(0);
-    file.read(buffer.data(), fileSize);
-
-    file.close();
-
-    return buffer;
-}
 
 class HelloTriangleVulkan {
 public:
@@ -183,9 +169,9 @@ private:
     std::vector<void*> uniformBuffersMapped;
 
     struct UniformBufferObject {
-        glm::mat4 model;
-        glm::mat4 view;
-        glm::mat4 proj;
+        alignas(16) glm::mat4 model;
+        alignas(16) glm::mat4 view;
+        alignas(16) glm::mat4 proj;
     };
 
     VkDescriptorPool descriptorPool;
@@ -251,6 +237,24 @@ private:
         createSyncObjects();
     }
 
+    std::vector<char> readFile(const std::string& filename) {
+        std::ifstream file(filename, std::ios::ate | std::ios::binary);
+
+        if (!file.is_open()) {
+            throw std::runtime_error("Failed to open file!");
+        }
+
+        size_t fileSize = (size_t)file.tellg();
+        std::vector<char> buffer(fileSize);
+
+        file.seekg(0);
+        file.read(buffer.data(), fileSize);
+
+        file.close();
+
+        return buffer;
+    }
+
     void mainLoop() {
         while (!glfwWindowShouldClose(window)) {
             glfwPollEvents();
@@ -270,6 +274,10 @@ private:
         vkFreeMemory(logicalDevice, vertexBufferMemory, nullptr);
 
         for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+            if (uniformBuffersMapped[i] != nullptr) {
+                vkUnmapMemory(logicalDevice, uniformBuffersMemory[i]);
+                uniformBuffersMapped[i] = nullptr;
+            }
             vkDestroyBuffer(logicalDevice, uniformBuffers[i], nullptr);
             vkFreeMemory(logicalDevice, uniformBuffersMemory[i], nullptr);
         }
@@ -765,8 +773,16 @@ private:
     }
 
     void createGraphicsPipeline() {
-        auto vertShaderCode = readFile("../shaders/vert.spv");
-        auto fragShaderCode = readFile("../shaders/frag.spv");
+        std::vector<char> vertShaderCode = readFile("../shaders/vert.spv");
+        std::vector<char> fragShaderCode = readFile("../shaders/frag.spv");
+
+        if (vertShaderCode.size() % 4 != 0) {
+            throw std::runtime_error("SPIR-V vertex shader size is not a multiple of 4");
+        }
+
+        if (vertShaderCode.size() % 4 != 0) {
+            throw std::runtime_error("SPIR-V fragment shader size is not a multiple of 4");
+        }
 
         VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
         VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
@@ -797,7 +813,7 @@ private:
 
         VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
         inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-        inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST; //triangles with no overlapping vertices
+        inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST; //interpret vertex data in sets of 3 to form a triangle
         inputAssembly.primitiveRestartEnable = VK_FALSE;
 
         VkPipelineViewportStateCreateInfo viewportState{};
@@ -1414,7 +1430,7 @@ private:
         appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
         appInfo.pEngineName = "No Engine";
         appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-        appInfo.apiVersion = VK_API_VERSION_1_1;
+        appInfo.apiVersion = VK_API_VERSION_1_3;
 
         //set up the createInfo struct for vulkan
         VkInstanceCreateInfo createInfo{};

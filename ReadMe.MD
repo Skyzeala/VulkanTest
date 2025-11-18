@@ -21,11 +21,8 @@ Check out this square! We're on to 3D!
 Topics explored so far:
 - Basic program setup - initialize, main loop, cleanup, window setup with GLFW, intro to Vulkan
 - Vulkan instance - create a basic instance of Vulkan with extensions from GLFW
-- GLFW extensions - more extension options and info about extension support
 - Validation layers - how to get debug output when things go wrong using layers built in to the Vulkan SDK
-- Physical devices - find GPUs and check their computing and Vulkan support capabilities, then pick one to use
-- Queue families - check device support for different command subsets
-- Logical devices - set up the interface for interacting with the chosen physical device
+- Physical devices, queue Families, and logical devices - find GPUs and check their computing and Vulkan support capabilities, then create an interface to use one
 - WSI & surfaces - Windows System Integration extensions - present rendered images
 - Swap chain - setup of swap chain surfaces, access to swap chain elements, and prepping for drawing
 - Graphics pipeline - graphics pipeline elements and shaders and how it works in Vulkan
